@@ -1,0 +1,13 @@
+.unfinished_lists h3, .finished_lists h3{
+    padding: 10px 0;
+}
+
+.list {
+    margin: 5px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #e7e7e7;
+    border-radius: 5px;
+    background-color: #f8f8f8;
+    font-size: 16px;
+}

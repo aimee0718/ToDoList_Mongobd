@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDoList</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/index.css">
+</head>
+
+<body>
+
+    <!-- 导航栏 -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/index">ToDoList</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/index">任务列表 <span class="sr-only">(current)</span></a></li>
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="搜索">
+                    </div>
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"
+                            aria-hidden="true"></span></button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                            aria-expanded="false">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 新建事件 -->
+    <div class="row">
+        <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3">
+            <button class="btn btn-default" data-toggle="modal" data-target="#list_add" id="btn_add">添加任务</button>
+        </div>
+    </div>
+
+    <!-- 未完成事件列表 -->
+    <div class="unfinished_lists row">
+        <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3">
+            <h3>未完成任务 <span class="badge">1</span></h3>
+        </div>
+        {{ each unfinished_lists }}
+        <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3">
+            <div class="list row">
+                <div class="col-xs-1">
+                    <input type="checkbox" class="checkbox_status" data-id="{{ $value.id }}">
+                </div>
+                <div class=" col-xs-8 col-md-9">
+                    {{ $value.text }}
+                </div>
+                <div class="col-xs-3 col-md-2">
+                    <button class="btn btn-primary btn-xs btn_edit" data-toggle="modal" data-id="{{ $value.id }}"
+                        data-target="#list_edit">修改</button>
+                    <button class="btn btn-default btn-xs btn_delete" data-id="{{ $value.id }}">删除</button>
+                </div>
+            </div>
+        </div>
+        {{ /each }}
+    </div>
+
+    <!-- 已完成事件列表 -->
+    <div class="finished_lists row">
+        <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3">
+            <h3>已完成任务 <span class="badge">1</span></h3>
+        </div>
+        {{ each finished_lists }}
+        <div class="col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3">
+            <div class="list row">
+                <div class="col-xs-1">
+                    <input type="checkbox" checked class="checkbox_status" data-id="{{ $value.id }}">
+                </div>
+                <div class=" col-xs-8 col-md-9">
+                    {{ $value.text }}
+                </div>
+                <div class="col-xs-3 col-md-2">
+                    <button class="btn btn-default btn-xs" disabled>完成</button>
+                    <button class="btn btn-default btn-xs btn_delete" data-id="{{ $value.id }}">删除</button>
+                </div>
+            </div>
+        </div>
+        {{ /each }}
+    </div>
+
+    <!-- 新建任务 模态框 -->
+    <div class="modal fade" id="list_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">任务内容</h4>
+                </div>
+                <form action="/index/add" method="post">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <input type="text" required name="text" class="form-control" placeholder="请输入内容">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary btn_new">新建</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改任务 模态框 -->
+    <div class="modal fade" id="list_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">任务内容</h4>
+                </div>
+                <form action="/index/edit" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" name="id">
+                        <div class="form-group">
+                            <input type="text" required name="text" class="form-control" placeholder="请输入内容">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary btn_save">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/public/js/index.js"></script>
+</body>
+
+</html>
